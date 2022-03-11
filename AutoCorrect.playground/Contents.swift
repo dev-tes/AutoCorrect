@@ -1,25 +1,29 @@
 import UIKit
 
 func autocorrect(_ text: String) -> String {
+    // declare a new string variable
     var newString = ""
     
+    // Due to the fact that every first word that changes starts with small letter regardless of their position in the sentence, there's need to turn some to lower case.
     let lowered = text.lowercased()
-    var textArray = text.components(separatedBy: " ")
+    
+    // Separate all words into an array - "textArray" and declare an empty array of string - "newArray"
+    //    var textArray = text.components(separatedBy: " ")
+    let textArray = lowered.components(separatedBy: " ")
     var newArray = [String]()
     
-    if textArray[0] == "You" || textArray[0] == "U" || textArray[0] == "Youuu" || textArray[0] == "Youuuu" || textArray[0] == "Youuuuu"{
-        textArray = lowered.components(separatedBy: " ")
-    }
-    
-    for wording in textArray {
-        if wording == "u" || wording.contains("you") && Set(wording).count == 3 && !wording.contains("youy"){
-            newString = wording.replacingOccurrences(of: wording, with: "your client", options: .literal, range: nil)
+    // For every word in the textArray, if the word is U or You and its casual variants with several U's, it should replace the word with "your client" and append to the newArray.
+    for word in textArray {
+        if word == "u" || word.contains("you") && Set(word).count == 3 && !word.contains("youy"){
+            newString = word.replacingOccurrences(of: word, with: "your client", options: .literal, range: nil)
             newArray.append(newString)
-        } else if wording.contains("you.") && Set(wording).count == 4 || wording == "u."{
-            newString = wording.replacingOccurrences(of: wording, with: "your client.", options: .literal, range: nil)
+            
+            // else for those with full stop behind them, this is because the separation doesn't exclude the full stop, it should add full stop to their "your client" too.
+        } else if word.contains("you.") && Set(word).count == 4 || word == "u."{
+            newString = word.replacingOccurrences(of: word, with: "your client.", options: .literal, range: nil)
             newArray.append(newString)
         } else {
-            newArray.append(wording)
+            newArray.append(word)
         }
     }
     
